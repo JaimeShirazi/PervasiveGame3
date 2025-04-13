@@ -8,7 +8,6 @@ public class PlantSegment : MonoBehaviour
     private bool allowGrowth = false;
 
     public Vector2 endPoint;
-    public GameObject childBranch;
     private GameObject parentBranch;
 
     private float sunAngle;
@@ -22,8 +21,6 @@ public class PlantSegment : MonoBehaviour
         startPos = transform.position;
         endPoint = startPos;
 
-        Vector2 vectorDelta = (Vector2)SunMovement.instance.gameObject.transform.position - startPos;
-        sunAngle = Mathf.Atan2(vectorDelta.x, vectorDelta.y);
     }
 
     //Method called by parent to setup the segment with necessary info. AngleWeighting is calculated by the parent as the "direction the growth is moving" more or less. Measured in radians, with 0 being directly up.
@@ -44,7 +41,38 @@ public class PlantSegment : MonoBehaviour
 
     void CreateNew(Vector2 initialPos, int newEnergy, float newGrowthRate)
     {
-        //Create new segment.
+        if (newEnergy <= 0)
+        {
+            return;
+        }
+
+        GameObject child;
+        float newAngle;
+
+        Vector2 vectorDelta = (Vector2)SunMovement.instance.gameObject.transform.position - startPos;
+        sunAngle = Mathf.Atan2(vectorDelta.x, vectorDelta.y);
+        newAngle = growthAngle + (sunAngle - growthAngle) * 0.5f;
+
+        if (Random.value > 0.7f) //Check for making extra offshoot branch
+        {
+            child = Instantiate(gameObject);
+
+            if (Random.value > 0.5f)
+            {
+                newAngle += Mathf.PI / 2;
+            }
+            else
+            {
+                newAngle -= Mathf.PI / 2;
+            }
+
+            child.GetComponent<PlantSegment>().Setup(1, growthRate, newAngle, gameObject);
+        }
+
+        child = Instantiate(gameObject);
+        newAngle = Mathf.Clamp((growthAngle + (sunAngle - growthAngle) * 0.1f) + (0.1f * (1 + 1/segmentEnergy)) , -Mathf.PI/2, Mathf.PI/2);
+
+        child.GetComponent<PlantSegment>().Setup(newEnergy, growthRate, newAngle, gameObject);
     }
 
     // Update is called once per frame
@@ -53,14 +81,14 @@ public class PlantSegment : MonoBehaviour
         //Testing
         if (test)
         {
-            Setup(5, 1f, 0f, gameObject);
+            Setup(10, 1f, 0f, gameObject);
             test = false;
         }
 
         if (allowGrowth){
             endPoint += plusVector * growthRate * Time.deltaTime;
             transform.position = endPoint;
-            if ((endPoint - startPos).magnitude > 0.5f)
+            if ((endPoint - startPos).magnitude > 0.3f)
             {
                 allowGrowth = false;
 
