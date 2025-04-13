@@ -7,6 +7,13 @@ public class SunMovement : MonoBehaviour
     public float angle;
     private float initialY;
 
+    public static SunMovement instance; //Singleton - only one sun needed. Makes access easier for plant algo.
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
