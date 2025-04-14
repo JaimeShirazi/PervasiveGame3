@@ -14,6 +14,19 @@ public class SunMovement : MonoBehaviour
         instance = this;
     }
 
+    private void OnEnable()
+    {
+        InputHandler.OnTimeUpdate += OnTimeUpdate;
+    }
+    private void OnDisable()
+    {
+        InputHandler.OnTimeUpdate -= OnTimeUpdate;
+    }
+    void OnTimeUpdate(float _)
+    {
+        angle = TimeUtils.GetSunAngle();
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
