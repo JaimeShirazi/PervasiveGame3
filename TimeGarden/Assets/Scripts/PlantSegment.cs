@@ -50,7 +50,8 @@ public class PlantSegment : MonoBehaviour
         float newAngle;
 
         Vector2 vectorDelta = (Vector2)SunMovement.instance.gameObject.transform.position - startPos;
-        sunAngle = Mathf.Atan2(vectorDelta.x, vectorDelta.y);
+        sunAngle = Vector2.SignedAngle(Vector2.up, vectorDelta.normalized) * Mathf.Deg2Rad * -1;
+        Debug.Log(sunAngle / Mathf.PI);
         newAngle = growthAngle + (sunAngle - growthAngle) * 0.5f;
 
         if (Random.value > 0.7f) //Check for making extra offshoot branch
@@ -70,7 +71,7 @@ public class PlantSegment : MonoBehaviour
         }
 
         child = Instantiate(gameObject);
-        newAngle = Mathf.Clamp((growthAngle + (sunAngle - growthAngle) * 0.1f) + (0.1f * (1 + 1/segmentEnergy)) , -Mathf.PI/2, Mathf.PI/2);
+        newAngle = Mathf.Clamp((growthAngle + (sunAngle - growthAngle) * 0.1f) + (0.1f * (1 + 1/segmentEnergy))*Mathf.Sign(sunAngle) , -Mathf.PI/2, Mathf.PI/2);
 
         child.GetComponent<PlantSegment>().Setup(newEnergy, growthRate, newAngle, gameObject);
     }

@@ -457,7 +457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9289eae519163fc4d967e9ff5600148f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angle: 1.12
+  angle: 0.00001
 --- !u!212 &1444515872
 SpriteRenderer:
   m_ObjectHideFlags: 0
