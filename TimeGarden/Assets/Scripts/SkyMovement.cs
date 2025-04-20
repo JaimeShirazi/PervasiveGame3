@@ -13,6 +13,6 @@ public class SkyMovement : MonoBehaviour
     }
     void OnTimeUpdate(float time)
     {
-        lightSource.eulerAngles = new Vector3(292.5f - (InputHandler.Time * 15f), -90, -90);
+        lightSource.eulerAngles = new Vector3(TimeUtils.GetSkyAngle(), -90, -90);
     }
 }
