@@ -23,7 +23,14 @@ public class InputHandler : MonoBehaviour
     /// <summary>
     /// The current time of the world, in hours.
     /// </summary>
-    public static float Time { get; private set; }
+    public static float Time => time * multiplier;
+    private static float time;
+
+    private static float multiplier;
+    public static void SetMultiplier(float multiplier)
+    {
+        InputHandler.multiplier = multiplier;
+    }
 
     public static Action<float> OnTimeUpdate = (_) => { };
 
@@ -102,9 +109,9 @@ public class InputHandler : MonoBehaviour
 
         float hour = currentAngle / 30f;
 
-        float prevTime = Time;
-        Time = hour;
-        OnTimeUpdate.Invoke(Time - prevTime);
+        float prevTime = time;
+        time = hour;
+        OnTimeUpdate.Invoke(time - prevTime);
     }
     float ModuloWithNegative(float target, float value)
     {
