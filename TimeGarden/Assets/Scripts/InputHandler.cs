@@ -26,7 +26,7 @@ public class InputHandler : MonoBehaviour
     public static float Time => time * multiplier;
     private static float time;
 
-    private static float multiplier;
+    private static float multiplier = 1;
     public static void SetMultiplier(float multiplier)
     {
         InputHandler.multiplier = multiplier;
